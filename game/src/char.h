@@ -547,6 +547,9 @@ enum e_overtime
 };
 
 #define NEW_ICEDAMAGE_SYSTEM
+#ifdef DROP_WIKI
+typedef std::vector<DWORD> ITEMDROP_MAP;
+#endif
 class CHARACTER : public CEntity, public CFSM, public CHorseRider
 {
 	protected:
@@ -838,6 +841,9 @@ class CHARACTER : public CEntity, public CFSM, public CHorseRider
 		std::string		m_stMobile;
 		char			m_szMobileAuth[5];
 		BYTE			m_bChatCounter;
+#ifdef DROP_WIKI
+		ITEMDROP_MAP	m_map_drop_item;
+#endif
 
 		// End of Basic Points
 
@@ -1513,6 +1519,9 @@ class CHARACTER : public CEntity, public CFSM, public CHorseRider
 
 	public:
 		void				SetTarget(LPCHARACTER pkChrTarget);
+#ifdef DROP_WIKI
+		void				SendTargetDrop();
+#endif
 		void				BroadcastTargetPacket();
 		void				ClearTarget();
 		void				CheckTarget();
@@ -1540,6 +1549,10 @@ class CHARACTER : public CEntity, public CFSM, public CHorseRider
 
 		void				SetMallLoadTime(int t) { m_iMallLoadTime = t; }
 		int					GetMallLoadTime() const { return m_iMallLoadTime; }
+#ifdef DROP_WIKI
+		void				SetItemDropRecvTime(int t) { m_iSendItemDropTime = t; }
+		int					GetItemDropRecvTime() const { return m_iSendItemDropTime; }
+#endif
 
 		CSafebox *			GetMall() const;
 		void				LoadMall(int iItemCount, TPlayerItem * pItems);
@@ -1556,6 +1569,9 @@ class CHARACTER : public CEntity, public CFSM, public CHorseRider
 
 		CSafebox *			m_pkMall;
 		int					m_iMallLoadTime;
+#ifdef DROP_WIKI
+		int					m_iSendItemDropTime;
+#endif
 
 		PIXEL_POSITION		m_posSafeboxOpen;
 

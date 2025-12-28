@@ -97,6 +97,9 @@ enum
 	// END_OF_SCRIPT_SELECT_ITEM
 
 	HEADER_CG_LOGIN5_OPENID			= 116,
+#ifdef DROP_WIKI
+	HEADER_CG_DROP_ITEM				= 170,
+#endif
 
 //	HEADER_CG_ROULETTE				= 200,
 //	HEADER_CG_RUNUP_MATRIX_ANSWER	= 201,
@@ -287,6 +290,9 @@ enum
 	//HYBRID CRYPT
 
 	HEADER_GC_AUTH_SUCCESS_OPENID	= 154,
+#ifdef DROP_WIKI
+	HEADER_GC_TARGET_DROP 			= 160,
+#endif
 
 	// ROULETTE
 	HEADER_GC_ROULETTE					= 200,
@@ -2439,6 +2445,19 @@ typedef struct packet_target_info_load
 	BYTE header;
 	DWORD dwVID;
 } TPacketCGTargetInfoLoad;
+#endif
+
+#ifdef DROP_WIKI
+typedef struct packet_target_drop {
+	BYTE	header;
+	WORD	raceVnum;
+	WORD	size;
+	DWORD	items[ITEM_DROP_SIZE];
+} TPacketGCTargetDrop;
+
+typedef struct SPacketCGDropItem {
+	BYTE	bHeader;
+} TPacketCGDropItem;
 #endif
 
 #pragma pack()

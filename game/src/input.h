@@ -163,6 +163,9 @@ class CInputMain : public CInputProcessor
 		void		Acce(LPCHARACTER pkChar, const char* c_pData);
 #endif
 		void		Roulette(LPCHARACTER ch, const char* c_pData);
+#ifdef DROP_WIKI
+		void		RequestDropItem(LPCHARACTER ch);
+#endif
 };
 
 class CInputDead : public CInputMain
