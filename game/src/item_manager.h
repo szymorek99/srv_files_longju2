@@ -406,6 +406,9 @@ class ITEM_MANAGER : public singleton<ITEM_MANAGER>
 		DWORD			GetRefineFromVnum(DWORD dwVnum);
 
 		static void		CopyAllAttrTo(LPITEM pkOldItem, LPITEM pkNewItem);
+#ifdef DROP_WIKI
+		bool	GetDropItem(LPCHARACTER pkChr, std::vector<DWORD> & vec_drop_item);		// pkNewItem���� ��� �Ӽ��� ���� ������ ����ϴ� �Լ�.
+#endif
 
 
 		const CSpecialItemGroup* GetSpecialItemGroup(DWORD dwVnum);

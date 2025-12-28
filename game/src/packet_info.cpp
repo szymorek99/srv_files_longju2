@@ -233,6 +233,9 @@ CPacketInfoCG::CPacketInfoCG()
 	Set(HEADER_CG_XTRAP_ACK, sizeof(TPacketXTrapCSVerify), "XTrapResponse", false);
 	Set(HEADER_CG_DRAGON_SOUL_REFINE, sizeof(TPacketCGDragonSoulRefine), "DragonSoulRefine", false);
 	Set(HEADER_CG_STATE_CHECKER, sizeof(BYTE), "ServerStateCheck", false);
+#ifdef DROP_WIKI
+	Set(HEADER_CG_DROP_ITEM, sizeof(TPacketCGDropItem), "DropItem", true);
+#endif
 #ifdef __SEND_TARGET_INFO__
 	Set(HEADER_CG_TARGET_INFO_LOAD, sizeof(TPacketCGTargetInfoLoad), "TargetInfoLoad" );
 #endif

@@ -1614,7 +1614,7 @@ void ITEM_MANAGER::CreateQuestDropItem(LPCHARACTER pkChr, LPCHARACTER pkKiller, 
 
 	if (GetDropPerKillPct(100, 2000, iDeltaPercent, "2006_drop") >= number(1, iRandRange))
 	{
-		sys_log(0, "À°°¢º¸ÇÕ DROP EVENT ");
+		sys_log(0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DROP EVENT ");
 
 		const static DWORD dwVnum = 50037;
 
@@ -1626,7 +1626,7 @@ void ITEM_MANAGER::CreateQuestDropItem(LPCHARACTER pkChr, LPCHARACTER pkKiller, 
 
 	if (GetDropPerKillPct(100, 2000, iDeltaPercent, "2007_drop") >= number(1, iRandRange))
 	{
-		sys_log(0, "À°°¢º¸ÇÕ DROP EVENT ");
+		sys_log(0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DROP EVENT ");
 
 		const static DWORD dwVnum = 50043;
 
@@ -1900,4 +1900,90 @@ void ITEM_MANAGER::CopyAllAttrTo(LPITEM pkOldItem, LPITEM pkNewItem)
 
 	pkOldItem->CopyAttributeTo(pkNewItem);
 }
+
+#ifdef DROP_WIKI
+bool ITEM_MANAGER::GetDropItem(LPCHARACTER pkChr, std::vector<DWORD> & vec_drop_item) {
+	if (!pkChr)
+		return false;
+
+	BYTE bRank = pkChr->GetMobRank();
+
+	std::vector<CItemDropInfo>::iterator it = g_vec_pkCommonDropItem[bRank].begin();
+
+	while (it != g_vec_pkCommonDropItem[bRank].end())
+	{
+		const CItemDropInfo & c_rInfo = *(it++);
+		if (test_server)
+			sys_log(0, "recv-drop-item: [%lu]", c_rInfo.m_dwVnum);
+		vec_drop_item.push_back(c_rInfo.m_dwVnum);
+	}
+
+	{
+		itertype(m_map_pkDropItemGroup) it;
+		it = m_map_pkDropItemGroup.find(pkChr->GetRaceNum());
+		if (it != m_map_pkDropItemGroup.end()) {
+			__typeof(it->second->GetVector()) v = it->second->GetVector();
+			for (DWORD i = 0; i < v.size(); ++i) {
+				if (test_server)
+					sys_log(0, "recv-drop-item: [%lu]", v[i].dwVnum);
+				vec_drop_item.push_back(v[i].dwVnum);
+			}
+		}
+	}
+
+	{
+		itertype(m_map_pkMobItemGroup) it;
+		it = m_map_pkMobItemGroup.find(pkChr->GetRaceNum());
+		if (it != m_map_pkMobItemGroup.end()) {
+			CMobItemGroup* pGroup = it->second;
+			if (pGroup && !pGroup->IsEmpty()) {
+				const CMobItemGroup::SMobItemGroupInfo & info = pGroup->GetOne();
+				if (test_server)
+					sys_log(0, "recv-drop-item: [%lu]", info.dwItemVnum);
+				vec_drop_item.push_back(info.dwItemVnum);
+			}
+		}
+	}
+
+	{
+		itertype(m_map_pkLevelItemGroup) it;
+		it = m_map_pkLevelItemGroup.find(pkChr->GetRaceNum());
+		if (it != m_map_pkLevelItemGroup.end()) {
+			__typeof(it->second->GetVector()) v = it->second->GetVector();
+			for (DWORD i = 0; i < v.size(); i++) {
+				DWORD dwVnum = v[i].dwVNum;
+				if (test_server)
+					sys_log(0, "recv-drop-item: [%lu]", dwVnum);
+				vec_drop_item.push_back(dwVnum);
+			}
+		}
+	}
+
+	{
+		itertype(m_map_pkGloveItemGroup) it;
+		it = m_map_pkGloveItemGroup.find(pkChr->GetRaceNum());
+		if (it != m_map_pkGloveItemGroup.end()) {
+			__typeof(it->second->GetVector()) v = it->second->GetVector();
+			for (DWORD i = 0; i < v.size(); ++i) {
+				DWORD dwVnum = v[i].dwVnum;
+				if (test_server)
+					sys_log(0, "recv-drop-item: [%lu]", dwVnum);
+				vec_drop_item.push_back(dwVnum);
+			}
+		}
+	}
+
+	{
+		if (pkChr->GetMobDropItemVnum()) {
+			itertype(m_map_dwEtcItemDropProb) it = m_map_dwEtcItemDropProb.find(pkChr->GetMobDropItemVnum());
+			if (it != m_map_dwEtcItemDropProb.end())
+				if (test_server)
+					sys_log(0, "recv-drop-item: [%lu]", pkChr->GetMobDropItemVnum());
+			vec_drop_item.push_back(pkChr->GetMobDropItemVnum());
+		}
+	}
+
+	return vec_drop_item.size();
+}
+#endif
 // GameCore.top
