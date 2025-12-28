@@ -435,6 +435,10 @@ bool CExchange::CheckSpace()
 			{
 				s_grid4.Put(iPos, 1, item->GetSize());
 			}
+			else if ((iPos = s_grid5.FindBlank(1, item->GetSize())) >= 0)
+			{
+				s_grid5.Put(iPos, 1, item->GetSize());
+			}
 #endif
 			else
 				return false;
