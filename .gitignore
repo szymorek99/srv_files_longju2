@@ -1,0 +1,11 @@
+liblua/
+libsql/
+libpoly/
+libthecore/
+libgame/
+
+*.sln
+*.suo
+*.vssscc
+
+__REVISION__
